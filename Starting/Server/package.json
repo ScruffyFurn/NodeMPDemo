@@ -1,0 +1,23 @@
+{
+  "name": "atest1",
+  "version": "1.0.0",
+  "description": "\"# atest1\"",
+  "main": "sever.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ScruffyFurn/atest1.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ScruffyFurn/atest1/issues"
+  },
+  "homepage": "https://github.com/ScruffyFurn/atest1",
+  "dependencies": {
+    "express": "^4.14.0",
+    "socket.io": "^1.4.8"
+  }
+}

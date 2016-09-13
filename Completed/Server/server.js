@@ -5,7 +5,7 @@ To run: Type the follow in a cmd window with Admin
 privs
     node server.js  
 
-** Coded by Mickey "ScruffyFurn" MacDonald  2014 **
+** Coded by Mickey "ScruffyFurn" MacDonald  2016 **
 **************************************************/
 
 
@@ -13,7 +13,6 @@ privs
 ** Requirements
 **************************************************/
 var util = require("util"),
-   // io = require("socket.io"),
     express = require('express'),
     Player = require("./player").Player;
 var app = express();
@@ -25,20 +24,15 @@ var port = process.env.PORT || 80;
 /**************************************************
 ** Variables
 **************************************************/
-var 
-    players;
+var players;
 
 /**************************************************
 ** Init function
 **************************************************/
 function init() {
     players = [];
-    
-    //Set our Socket.io server to listen on port 8000
-    //socket = io.listen(80);
     //Set the event handlers
     setEventHandlers();
-
 };
 
 server.listen(port, function () {
@@ -112,7 +106,7 @@ function onNewPlayer(data) {
             x: existingPlayer.getX(),
             y: existingPlayer.getY()
         });
-    }    ;
+    };
     
     //Add this new player to the players array
     players.push(newPlayer);
@@ -129,7 +123,7 @@ function onMovePlayer(data) {
     if (!movePlayer) {
         util.log("Player not found: " + this.id);
         return;
-    }    ;
+    };
     
     //Set selected players position data via setters
     movePlayer.setX(data.x);
@@ -153,7 +147,7 @@ function playerById(id) {
     for (i = 0; i < players.length; i++) {
         if (players[i].id == id)
             return players[i];
-    }    ;
+    };
     
     return false;
 }

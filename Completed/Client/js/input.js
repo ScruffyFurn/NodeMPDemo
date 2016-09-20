@@ -1,55 +1,50 @@
 // Simple input class
 
-var Input = function(up, left, right, down) {
-	var up = up || false,
-		left = left || false,
-		right = right || false,
-		down = down || false;
-		
-	var onKeyDown = function(e) {
-		var that = this,
-			c = e.keyCode;
-		switch (c) {
-			case 37: // Left
-				that.left = true;
-				break;
-			case 38: // Up
-				that.up = true;
-				break;
-			case 39: // Right
-				that.right = true; 
-				break;
-			case 40: // Down
-				that.down = true;
-				break;
-		};
-	};
-	
-	var onKeyUp = function(e) {
-		var that = this,
-			c = e.keyCode;
-		switch (c) {
-			case 37: // Left
-				that.left = false;
-				break;
-			case 38: // Up
-				that.up = false;
-				break;
-			case 39: // Right
-				that.right = false;
-				break;
-			case 40: // Down
-				that.down = false;
-				break;
-		};
-	};
+function Input(up, left, right, down) {
+    var params = {
+        up: up || false,
+        left: left || false,
+        right: right || false,
+        down: down || false
+    };
 
-	return {
-		up: up,
-		left: left,
-		right: right,
-		down: down,
-		onKeyDown: onKeyDown,
-		onKeyUp: onKeyUp
-	};
+    function onKeyDown(e) {
+        switch (e.keyCode) {
+            case 37: // Left
+                params.left = true;
+                break;
+            case 38: // Up
+                params.up = true;
+                break;
+            case 39: // Right
+                params.right = true;
+                break;
+            case 40: // Down
+                params.down = true;
+                break;
+        };
+    };
+
+    function onKeyUp(e) {
+        switch (e.keyCode) {
+            case 37: // Left
+                params.left = false;
+                break;
+            case 38: // Up
+                params.up = false;
+                break;
+            case 39: // Right
+                params.right = false;
+                break;
+            case 40: // Down
+                params.down = false;
+                break;
+        };
+    };
+
+    return {
+        params: params,
+        onKeyDown: onKeyDown,
+        onKeyUp: onKeyUp
+    };
 };

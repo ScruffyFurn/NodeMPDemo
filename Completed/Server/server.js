@@ -1,9 +1,9 @@
 ﻿/**************************************************
 ** GAME SERVER **
 This holds all the logic for the game server.
-To run: Type the follow in a cmd window with Admin 
+To run: Type the follow in a cmd window with Admin
 privs
-    node server.js  
+    node server.js
 
 ** Coded by Mickey "ScruffyFurn" MacDonald  2016 **
 **************************************************/
@@ -18,7 +18,7 @@ var util = require("util"),
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-var port = process.env.PORT || 80;
+var port = process.env.PORT || 8080;
 
 
 /**************************************************
@@ -61,19 +61,19 @@ function onSocketConnection(client) {
 **************************************************/
 function onClientDisconnect() {
     util.log("Player has disconnected: " + this.id);
-    
+
     // Find the selected player to remove
     var removePlayer = playerById(this.id);
-    
+
     // Return not found message of player is not in array
     if (!removePlayer) {
         util.log("Player not found: " + this.id);
         return;
     }    ;
-    
+
     //Remove the selected player from the array
     players.splice(players.indexOf(removePlayer), 1);
-    
+
     //Tell other players to remove the selected player
     this.broadcast.emit("remove player", { id: this.id });
 };
@@ -82,13 +82,13 @@ function onClientDisconnect() {
 ** On new player function
 **************************************************/
 function onNewPlayer(data) {
-    /*This creates a new player instance using 
-    position data sent by the connected client. 
-    The identification number is stored for future 
+    /*This creates a new player instance using
+    position data sent by the connected client.
+    The identification number is stored for future
     reference.*/
     var newPlayer = new Player(data.x, data.y);
     newPlayer.id = this.id;
-    
+
     //Tell the other players about this new player
     this.broadcast.emit("new player",
                         {
@@ -107,7 +107,7 @@ function onNewPlayer(data) {
             y: existingPlayer.getY()
         });
     };
-    
+
     //Add this new player to the players array
     players.push(newPlayer);
 };
@@ -118,17 +118,17 @@ function onNewPlayer(data) {
 function onMovePlayer(data) {
     //Select player to move
     var movePlayer = playerById(this.id);
-    
+
     //Display message if id is not found in array
     if (!movePlayer) {
         util.log("Player not found: " + this.id);
         return;
     };
-    
+
     //Set selected players position data via setters
     movePlayer.setX(data.x);
     movePlayer.setY(data.y);
-    
+
     //Tell the other players about the movement
     this.broadcast.emit("move player",
                         {
@@ -148,7 +148,7 @@ function playerById(id) {
         if (players[i].id == id)
             return players[i];
     };
-    
+
     return false;
 }
 

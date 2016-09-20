@@ -6,8 +6,11 @@ var canvas,         // Canvas DOM element
     remotePlayers,  // Remote players array
     socket;         // WebSocket
 
-
 function init(config) {
+    if (window.Worker) {
+        socket = new Worker('js/socket.js');
+    }
+
     // Declare the canvas and rendering context
     canvas = document.getElementById('gameCanvas');
     ctx = canvas.getContext('2d');
@@ -30,10 +33,41 @@ function init(config) {
     remotePlayers = [];
 
     // Init the socket connection to our Azure NodeJS server
-    socket = io.connect(config.url + ':' + config.port);
+    socket.postMessage(JSON.stringify({
+        type: 'setup',
+        data: {
+            player: {
+                x: localPlayer.getX(),
+                y: localPlayer.getY()
+            },
+            config: config
+        }
+    }));
 
-    // Start listening for events
-    setEventHandlers();
+    socket.onmessage = function (event) {
+        var message = JSON.parse(event.data);
+
+        switch (message.type) {
+            case 'setup':
+                if (message.data.status) {
+                    // Start listening for events
+                    setEventHandlers();
+                }
+                break;
+
+            case 'newPlayer':
+                onNewPlayer(message.data);
+                break;
+
+            case 'movePlayer':
+                onMovePlayer(message.data);
+                break;
+
+            case 'removePlayer':
+                onRemovePlayer(message.data);
+                break;
+        }
+    };
 };
 
 
@@ -47,13 +81,6 @@ function setEventHandlers() {
     // Input
     window.addEventListener('keydown', onKeydown, false);
     window.addEventListener('keyup', onKeyup, false);
-
-    // Sockets
-    socket.on('connect', onSocketConnected);
-    socket.on('disconnect', onSocketDisconnect);
-    socket.on('new player', onNewPlayer);
-    socket.on('move player', onMovePlayer);
-    socket.on('remove player', onRemovePlayer);
 };
 
 // Key down
@@ -77,31 +104,8 @@ function onResize(e) {
     canvas.height = window.innerHeight;
 };
 
-// Socket connect to the server
-function onSocketConnected() {
-    //Connected
-    console.log('Connected to socket server');
-
-    //Tell the server to create a new player
-    socket.emit(
-        'new player',
-        {
-            x: localPlayer.getX(),
-            y: localPlayer.getY()
-        }
-    );
-};
-
-// Socket disconnect from the server
-function onSocketDisconnect() {
-    console.log('Disconnected from socket server');
-};
-
 // New Player
 function onNewPlayer(data) {
-    //Display new player message in console
-    console.log('New player connected: ' + data.id);
-
     /*Create a new player with placement information
     from the server. Then set the id of the new player
     and add it to the remote players array*/
@@ -134,6 +138,7 @@ function onRemovePlayer(data) {
     // Display a console message if the id is not in array
     if (!removePlayer) {
         console.log('Player not found: ' + data.id);
+
         return;
     };
 
@@ -153,13 +158,13 @@ function gameloop() {
 function update() {
     // Send movement data if the player has moved
     if (localPlayer.update(input)) {
-        socket.emit(
-            'move player',
-            {
+        socket.postMessage(JSON.stringify({
+            type: 'move',
+            data: {
                 x: localPlayer.getX(),
                 y: localPlayer.getY()
             }
-        );
+        }));
     };
 };
 

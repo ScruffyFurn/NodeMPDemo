@@ -5,11 +5,10 @@
 	<head>
 		<title>HTML5 Azure multiplayer POC </title>
 		<meta charset="utf-8">
-		
-		<link rel="stylesheet" href="style/reset.css">
+
 		<link rel="stylesheet" href="style/game.css">
 	</head>
-	
+
 	<body>
 		<canvas id="gameCanvas"></canvas>
         <script src="js/socket.io.js"></script>
@@ -17,6 +16,13 @@
         <script src="js/input.js"></script>
         <script src="js/player.js"></script>
         <script src="js/game.js"></script>
-       
+        <script>
+            // Setup and unleash the hounds!
+            init({
+                url: 'http://localhost',
+                port: '8080'
+            });
+            gameloop();
+        </script>
 	</body>
 </html>

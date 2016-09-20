@@ -1,74 +1,75 @@
 // Our player class
 
-var Player = function(startX, startY) {
-	var x = startX,
-		y = startY,
+function Player(startX, startY) {
+    var x = startX,
+        y = startY,
         id,
         color,
-		moveAmount = 2;
+        moveAmount = 2;
 
     // Getter and setters
-	var getX = function () {
-	    return x;
-	};
+    function getX() {
+        return x;
+    }
 
-	var getY = function () {
-	    return y;
-	};
+    function getY() {
+        return y;
+    }
 
-	var setX = function (newX) {
-	    x = newX;
-	};
+    function setX(newX) {
+        x = newX;
+    }
 
-	var setY = function (newY) {
-	    y = newY;
-	};
+    function setY(newY) {
+        y = newY;
+    }
 
-	var update = function (keys) {
-
+    function update(keys) {
         // Save the position values
-	    var prevX = x,
+        var prevX = x,
             prevY = y;
 
-		if (keys.up) {
-			y -= moveAmount;
-		} else if (keys.down) {
-			y += moveAmount;
-		};
+        if (keys.params.up) {
+            y -= moveAmount;
+        } else if (keys.params.down) {
+            y += moveAmount;
+        };
 
-		if (keys.left) {
-			x -= moveAmount;
-		} else if (keys.right) {
-			x += moveAmount;
-		};
+        if (keys.params.left) {
+            x -= moveAmount;
+        } else if (keys.params.right) {
+            x += moveAmount;
+        };
 
-	    //Return true value if player has moved
-		return (prevX != x || prevY != y) ? true : false;
-	};
+        // Return true value if player has moved
+        return (prevX != x || prevY != y) ? true : false;
+    };
 
-    //A little helper function to give us a random color
-	randomPieceOfTheRainbow = function () {
-	    var letters = '0123456789ABCDEF'.split('');
-	    var color = '#';
-	    for (var i = 0; i < 6; i++) {
-	        color += letters[Math.floor(Math.random() * 16)];
-	    }
-	    return color;
-	}
+    // A little helper function to give us a random color
+    function randomPieceOfTheRainbow() {
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
 
-	ctx.fillStyle = randomPieceOfTheRainbow();
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
 
-	var draw = function (ctx) {
-	    ctx.fillRect(x - 5, y - 5, 10, 10);
-	};
+        return color;
+    }
 
-	return {
-	    getX: getX,
-	    getY: getY,
-	    setX: setX,
-	    setY: setY,
-		update: update,
-		draw: draw,
+    ctx.fillStyle = randomPieceOfTheRainbow();
+
+    function draw(ctx) {
+        ctx.fillRect(x - 5, y - 5, 10, 10);
+    };
+
+    return {
+        getX: getX,
+        getY: getY,
+        setX: setX,
+        setY: setY,
+        update: update,
+        draw: draw,
         id:id
-	}
+    }
 };
